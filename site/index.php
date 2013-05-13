@@ -1,6 +1,6 @@
 <?php 
 
-include('includes/config.php');
+require('includes/config.php');
 
 
 ?>
