@@ -34,7 +34,7 @@ require('includes/config.php');
 				$.post("pages/register.php", { 'username': username, 'password': password, 'email':email },
 					function(data) {
 						$('body').append(data);
-						$('#loginField').hide();
+						$('#registerField').hide();
 					}
 				);
 			});
