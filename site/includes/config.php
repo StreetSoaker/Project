@@ -1,9 +1,11 @@
 <?php 
 
+error_reporting(E_ALL);
+
 $hostname = 'localhost';
 $username = 'root';
-$password = 'test123';
-$database = 'supersoaker2';
+$password = '';
+$database = 'streetsoaker';
 
 $mysqli = new mysqli($hostname, $username, $password, $database);
 
