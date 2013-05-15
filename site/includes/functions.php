@@ -17,9 +17,8 @@ function returnError($array, $val) {
 		}
 		
 	} else {
-		return true;
+		return false;
 	}
-	
 }
 
 ?>
