@@ -28,13 +28,15 @@ if (isset($_POST['username']) && isset($_POST['password']) && count($error) == 0
         $stmt->close();
         $newSalt = hash('sha256',$dbSalt . $configSalt);
 
-        if(hash('sha256',$newSalt . $password) == $dbPassword) {
-            echo 'Login Succes';
-
+        if(hash('sha256',$newSalt . $password) == $dbPassword) { 
             $stmt = $mysqli->prepare("UPDATE `users` SET `lastlogin` = NOW() WHERE id = ?");
             $stmt->bind_param('i', $id); 
             $stmt->execute();
             $stmt->close();
+
+            session_start();
+            $_SESSION['username'] = $username;
+
         } else {
             echo 'Wrong password';
         }
