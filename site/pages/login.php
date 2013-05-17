@@ -36,6 +36,7 @@ if (isset($_POST['username']) && isset($_POST['password']) && count($error) == 0
 
             session_start();
             $_SESSION['username'] = $username;
+            $_SESSION['id'] = $id;
 
         } else {
             echo 'Wrong password';
