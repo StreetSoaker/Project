@@ -51,11 +51,13 @@ if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['pass
 	    $dbSalt = hash('sha256',$userSalt . $configSalt);
 	    $dbPassword = hash('sha256', $dbSalt . $password);
 	    
-	    $stmt = $mysqli->prepare("INSERT INTO `users` VALUES('',?,?,?,?)") or die($mysqli->error);
+	    $stmt = $mysqli->prepare("INSERT INTO `users` VALUES('',?,?,?,?,NOW(),'')") or die($mysqli->error);
 		$stmt->bind_param('ssss', $username, $dbPassword, $email, $userSalt) or die($mysqli->error);
 
 		if($stmt->execute() or die($mysqli->error)) {
 			echo 'Succesfully registered';
+
+			
 		} else {
 			$error[] = 'Something went wrong, try again later';
 		}
