@@ -27,39 +27,38 @@ if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['pass
 	$passwordagain = $_POST['passwordagain'];
 	$email = $_POST['email'];
 
-	if ($password == $passwordagain) {
-		$stmt = $mysqli->prepare("SELECT `username`, `email` FROM `users` WHERE `username` = ? OR `email` = ? LIMIT 0,1") or die($mysqli->error);
-		$stmt->bind_param('ss', $username, $email);
-		$stmt->execute();
-		$stmt->bind_result($dbUsername, $dbEmail);
-		$stmt->fetch();
-		$stmt->close();
-		
-		if ($username == $dbUsername) {
-			$error[] = 'Username is already taken';
+	$stmt = $mysqli->prepare("SELECT `username`, `email` FROM `users` WHERE `username` = ? OR `email` = ? LIMIT 0,1") or die($mysqli->error);
+	$stmt->bind_param('ss', $username, $email);
+	$stmt->execute();
+	$stmt->bind_result($dbUsername, $dbEmail);
+	$stmt->fetch();
+	$stmt->close();
+	
+	if ($password != $passwordagain) {
+		$error[] = 'Passwords do not match';
+	}
+
+	if ($username == $dbUsername) {
+		$error[] = 'Username is already taken';
+	}
+
+	if ($email == $dbEmail) {
+		$error[] = 'Email is already taken';
+	}
+
+	if($username != $dbUsername && $email != $dbEmail && $password == $passwordagain) {
+		$userSalt = str_pad(rand(0,9999999999), 10, '0', STR_PAD_LEFT);
+	    $dbSalt = hash('sha256',$userSalt . $configSalt);
+	    $dbPassword = hash('sha256', $dbSalt . $password);
+	    
+	    $stmt = $mysqli->prepare("INSERT INTO `users` VALUES('',?,?,?,?)") or die($mysqli->error);
+		$stmt->bind_param('ssss', $username, $dbPassword, $email, $userSalt) or die($mysqli->error);
+
+		if($stmt->execute() or die($mysqli->error)) {
+			echo 'Succesfully registered';
+		} else {
+			$error[] = 'Something went wrong, try again later';
 		}
-
-		if ($email == $dbEmail) {
-			$error[] = 'Email is already taken';
-		}
-
-		if($username != $dbUsername && $email != $dbEmail) {
-			$userSalt = str_pad(rand(0,9999999999), 10, '0', STR_PAD_LEFT);
-		    $dbSalt = hash('sha256',$userSalt . $configSalt);
-		    $dbPassword = hash('sha256', $dbSalt . $password);
-		    
-		    $stmt = $mysqli->prepare("INSERT INTO `users` VALUES('',?,?,?,?)") or die($mysqli->error);
-			$stmt->bind_param('ssss', $username, $dbPassword, $email, $userSalt) or die($mysqli->error);
-
-			if($stmt->execute() or die($mysqli->error)) {
-				echo 'Succesfully registered';
-			} else {
-				$error[] = 'Something went wrong, try again later';
-			}
-		}
-
-	} else {
-		$error[] = 'Entered passwords do not match';
 	}
 	
 
