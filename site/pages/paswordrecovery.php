@@ -7,97 +7,87 @@ require('../includes/functions.php');
 //create empty array to put errors into
 $error = array();
 
-// Check if token get value is given
-if (isset($_GET['token'] && !empty($_GET['token']))) {
-		$token = $_GET['token'];
+if(!isset($_GET['token']) && !isset($_POST['password1']) && !isset($_POST['password2']) || !isset($_POST['email'])) {
+	return false;
+} elseif(isset($_GET['token'])) {
+	$token = strip_tags($_GET['token']);
 
-		//Check if the password1 and password2 post values are set
-		if (isset($_POST['password1'] && isset($_POST['password2']))) {	
-			$password1 = $_POST['password1'];
-			$password2 = $_POST['password2'];
+	$stmt = $mysqli->prepare("SELECT `userid`,`starttime` FROM `passwordrecovery` WHERE `token` = ? AND `active` = 1 LIMIT 0,1");
+	$stmt->bind_param('s', $token);
+	$stmt->execute();
+	$stmt->store_result();
+	$stmt->bind_result($userId, $startTime);
+	$stmt->fetch();
+	if($stmt->num_rows() == 1) {
+		if((mktime() - $startTime) < 3600) {
+		?>
 
-			//check if password1 matches password2
-			if ($password1 == $password2) {
-
-				//Hash the password with sha256 and generate unique usersalt
-				$userSalt = str_pad(rand(0,9999999999), 10, '0', STR_PAD_LEFT);
-		        $dbSalt = hash('sha256',$userSalt . $configSalt);
-		        $dbPassword = hash('sha256', $dbSalt . $password1);
-
-		        //update the users table with the new password and usersalt
-				$stmt = $mysqli->prepare("UPDATE `users` SET `password`=? `salt`=? WHERE `id` = ?") or die($mysqli->error);
-				$stmt->bind_param('ss', $dbPassword, $userSalt, $userid);
-				$stmt->execute();
-				$stmt->close();
-
-				//Set the password recovery token in the database on non active 
-				$stmt = $mysqli->prepare("UPDATE `passwordrecovery` SET `active`= 0 WHERE `token` = ?") or die($mysqli->error);
-				$stmt->bind_param('s', $token);
-				$stmt->execute();
-				$stmt->close();
-
-			} else {
-				$error[] = 'New Passwords do not match';
-			}
-
-		} else {
-			//Select userid and starttime from database to check if the token has expired yet
-			$stmt = $mysqli->prepare("SELECT `userid`, `starttime` FROM `passwordrecovery` WHERE `token` = ? LIMIT 0,1") or die($mysqli->error);
-			$stmt->bind_param('s', $token);
-			$stmt->execute();
-			$stmt->store_result();
-	 
-			if ($stmt->num_rows == 1) {
-					$stmt->bind_result($userid, $startime);
-					if ((mktime() - $startime) <= 3600) {
-					?>
-
-						<form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
-							<input type="password" name="password1" />
-							<input type="password" name="password2" />
-							<input type="submit" name="submit" />
-						</form>
-	 
-					<?php
-					} else {
-							$error[] = 'Password recovery token has expired';
-					}
-	 
-					$userSalt = str_pad(rand(0,9999999999), 10, '0', STR_PAD_LEFT);
-	 
-			} else {
-					$error[] = 'Invalid password recovery token';
-			}
-	 
-			$stmt->close();	
-		}
+		<form method="post">
+			<input type="password" name="password1" placeholder="New password" />
+			<input type="password" name="password2" placeholder="Re-enter new password" />
+			<input type="hidden" name="userId" value="<?= $userId ?>" />
+			<input type="hidden" name="token" value="<?= $token ?>" />
+			<input type="submit" name="submit" value="Resetten" />
+		</form>
 		
-}
- 
-if (!isset($_POST['email'])) {
-	$error[] = 'Please enter your password';
-}
- 
-if (isset($_POST['email']) && count($error) == 0) {
- 
-		$email = $_POST['email'];
- 
-		$stmt = $mysqli->prepare("SELECT `id`, `username` FROM `users` WHERE `email` = ? LIMIT 0,1") or die($mysqli->error);
-		$stmt->bind_param('s', $email);
-		$stmt->execute();
-		$stmt->store_result();
+		<?php
+		} else {
+			$error[] = 'Link is expired';
+		}
+	} else {
+		$error[] = 'Link not found';
+	}
+} elseif(isset($_POST['email'])) {
+	$stmt = $mysqli->prepare("SELECT `userid`,`email`,`username` FROM `users` WHERE `email` = ? LIMIT 0,1");
+	$stmt->bind_param('s', $token);
+	$stmt->execute();
+	$stmt->store_result();
+	$stmt->bind_result($userId, $startTime, $username);
+	$stmt->fetch();
+	if($stmt->num_rows() > 0) {
+		$email = strip_tags($_POST['email']);
+		$hashEmail = hash('sha256',$email);
+		$token = hash('sha256',$hashEmail . $configSalt);
 
-		if ($stmt->num_rows == 1) {
-			$stmt->bind_result($id, $username);
+		$stmt = $mysqli->prepare("INSERT INTO `passwordrecovery` SET `userid` = ? AND `starttime` = ? AND `token` = ? AND `active` = 1");
+		$stmt->bind_param('sss', $userId, mktime(), $token);
+		;
+
+		if($stmt->execute()) {
+			$headers  = 'MIME-Version: 1.0' . "\r\n";
+			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+			$headers .= 'To: '. $username .' <'.$email.'>' . "\r\n";
+			$headers .= 'From: StreetSoaker <no-reply@streetsoaker.com>' . "\r\n";
+
+			$subject = 'StreetSoaker - Reset your password';
+			$link 	 = 'http://localhost/~Robin/StreetSoaker/Project/site/pages/paswordrecovery.php?token='. $token;
+			$content = "
+Hello ". $username .", \n
+\n
+<a href=\"". $link ."\">Reset password</a>\n
+\n
+Regards, \n
+StreetSoaker
+			";
+
+			$mail = mail($email,$subject, $content, $headers);
+			if($mail) {
+				echo 'Email has been send to '. $email .". Click on the link in the mail to enter your new password.";
+			} else {
+				$error[] = 'Couldn\'t send email, please try again later';
+			}
 
 		} else {
-			$error[] = 'This email does not exist in our database';
+			$error[] = 'Couldn\'t reset your password password, please try again later';
 		}
- 
- 
+
+	} else {
+		$error[] = 'Email address not registered';
+	}
 } else {
- 
+
 }
- 
+
+returnError($error, 0);
  
 ?>
