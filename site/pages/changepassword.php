@@ -31,8 +31,8 @@ if (isset($_POST['password']) && isset($_POST['newpassword']) && isset($_POST['n
 	$stmt->fetch();
 	$stmt->close();
 
-	$newSalt = hash('sha256',$dbSalt . $configSalt);
-	$hashedPassword = hash('sha256',$newSalt . $password);
+	$combinedSalt = hash('sha256',$dbSalt . $configSalt);
+	$hashedPassword = hash('sha256',$combinedSalt . $password);
 
     if ($hashedPassword != $dbPassword) { 
     	$error[] = 'Wrong password';
@@ -52,11 +52,12 @@ if (isset($_POST['password']) && isset($_POST['newpassword']) && isset($_POST['n
 		$stmt->bind_param('ssi', $password, $userSalt, $id);
 		$stmt->execute();
 		$stmt->close();
-		echo 'Password change success';
+
+		$error[] = 'Password change success';
 	}
 
 }
 
-
+returnError($error, 0);
 
 ?>
