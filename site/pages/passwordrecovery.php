@@ -1,0 +1,123 @@
+<?php
+
+//require config and functions files
+require('../includes/config.php');
+require('../includes/functions.php');
+
+//create empty array to put errors into
+$error = array();
+if(isset($_SESSION['username'])) {
+	echo '<script>history.back();</script>';
+}
+
+if(!isset($_GET['token']) && !isset($_POST['password1']) && !isset($_POST['password2']) && !isset($_POST['email'])) {
+	?>
+		<form method="post" action="passwordrecovery.php">
+			<input type="email" name="email" placeholder="Email" />
+			<input type="submit" name="submit" value="Send mail" />
+		</form>
+	<?
+} elseif(isset($_GET['token'])) {
+	$token = strip_tags($_GET['token']);
+
+	
+	$stmt = $mysqli->prepare("SELECT `userid`,`starttime`, `token` FROM `passwordrecovery` WHERE `token` = ? AND `active` = 1 LIMIT 0,1");
+	$stmt->bind_param('s', $token);
+	$stmt->execute();
+	$stmt->store_result();
+	$stmt->bind_result($userId, $startTime, $token);
+	$stmt->fetch();
+	/**
+	 * Check if token is set and still active
+	**/
+	if($stmt->num_rows() == 1) {
+
+		/**
+		 * Add 3 Hours to the start time
+		**/
+		$time = new DateTime($startTime);
+		$time->add(new DateInterval('PT3H'));
+		$stamp = $time->format('Y-m-d H:i:s');
+
+		/**
+		 * Echo current time(Left) and Starttime + 3 hours(Right)
+		**/
+		echo strtotime(date('Y-m-d H:i:s')) . ' - ' . strtotime($stamp);
+
+		/**
+		 * Check if time limit isn't reached yet
+		**/
+		if(strtotime(date('Y-m-d H:i:s')) <= strtotime($stamp)) {
+			$_SESSION['token'] = $token;
+			$_SESSION['userid'] = $userId;
+
+		/**
+		 * Show input boxes to enter the new password
+		**/?>
+		<form method="post">
+			<input type="password" name="password1" placeholder="New password" /><br />
+			<input type="password" name="password2" placeholder="Re-enter password" /><br />
+			<input type="submit" name="submit" value="Reset Password" />
+		</form>
+		<?php
+
+		} else { // End check time limit
+			$error[] = 'Link is expired';
+		}
+	} else { // End num rows token
+		$error[] = 'Link not found';
+	}
+} elseif(isset($_POST['email'])) {
+	$email = $_POST['email'];
+	$stmt = $mysqli->prepare("SELECT `id`,`email`,`username` FROM `users` WHERE `email` = ? LIMIT 0,1") or die($mysqli->error());
+	$stmt->bind_param('s', $email);
+	$stmt->execute();
+	$stmt->store_result();
+	$stmt->bind_result($userId, $startTime, $username);
+	$stmt->fetch();
+	if($stmt->num_rows() > 0) {
+		$email = strip_tags($_POST['email']);
+		$hashEmail = hash('sha256',$email);
+		$token = hash('sha256',$hashEmail . $configSalt);
+
+		$stmt = $mysqli->prepare("INSERT INTO `passwordrecovery` (userid, token, starttime, active) VALUES(?, ?, ? ,1)");
+		$stmt->bind_param('sss', $userId, $token, date('Y-m-d H:i:s')) or die($mysqli->error());
+
+		if($stmt->execute()) {
+			$headers  = 'MIME-Version: 1.0' . "\r\n";
+			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+			$headers .= 'To: '. $username .' <'.$email.'>' . "\r\n";
+			$headers .= 'From: StreetSoaker <no-reply@streetsoaker.com>' . "\r\n";
+
+			$subject = 'StreetSoaker - Reset your password';
+			$link 	 = 'http://localhost/~Robin/StreetSoaker/Project/site/pages/paswordrecovery.php?token='. $token;
+			$content = "
+Hello ". $username .", \n
+\n
+<a href=\"". $link ."\">Reset password</a>\n
+\n
+Regards, \n
+StreetSoaker
+			";
+
+			$mail = mail($email,$subject, $content, $headers);
+			if($mail) {
+				echo 'Email has been send to '. $email .". Click on the link in the mail to enter your new password.";
+			} else {
+				$error[] = 'Couldn\'t send email, please try again later';
+			}
+
+		} else {
+			$error[] = 'Couldn\'t reset your password password, please try again later';
+		}
+
+	} else {
+		$error[] = 'Email address not registered';
+	}
+} else {
+
+}
+
+returnError($error, 0);
+ 
+?>

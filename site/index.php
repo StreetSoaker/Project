@@ -49,7 +49,7 @@ require('includes/config.php');
 		<form action="" id="login" method="post">
 			<input type="text" name="username" placeholder="Username" required /><br />
 			<input type="password" name="password" placeholder="Password" required /><br />
-			<input type="submit" name="submit" value="Inloggen" />
+			<input type="submit" name="submit" value="Inloggen" /><a href="pages/passwordrecovery.php">Recover password</a>
 		</form>
 	</fieldset>
 	

@@ -34,12 +34,11 @@ if (isset($_POST['username']) && isset($_POST['password']) && count($error) == 0
             $stmt->execute();
             $stmt->close();
 
-            session_start();
             $_SESSION['username'] = $username;
             $_SESSION['id'] = $id;
-
+            echo 'Logged in';
         } else {
-            echo 'Wrong password';
+            $error[] =  'Wrong password';
         }
         
 	} else {

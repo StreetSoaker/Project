@@ -1,7 +1,7 @@
 <?php 
 
 session_start();
-
+date_default_timezone_set("Europe/Amsterdam");
 error_reporting(E_ALL);
 
 $hostname = '46.21.172.159';
