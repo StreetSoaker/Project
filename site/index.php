@@ -18,7 +18,13 @@ require('includes/config.php');
 
 				$.post("pages/login.php", { 'username': username, 'password': password },
 					function(data) {
-						$('body').append(data);
+						if(data == 1) {
+							alert(0);
+
+							event.preventDefault();
+						} else {
+							$('body').append(data);
+						}
 						// $('#loginField').hide();
 					}
 				);

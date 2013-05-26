@@ -54,7 +54,7 @@ if(!isset($_GET['token']) && !isset($_POST['password1']) && !isset($_POST['passw
 		/**
 		 * Show input boxes to enter the new password
 		**/?>
-		<form method="post">
+		<form method="post" action="http://<?= $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] ?>">
 			<input type="password" name="password1" placeholder="New password" /><br />
 			<input type="password" name="password2" placeholder="Re-enter password" /><br />
 			<input type="submit" name="submit" value="Reset Password" />
@@ -68,6 +68,9 @@ if(!isset($_GET['token']) && !isset($_POST['password1']) && !isset($_POST['passw
 		$error[] = 'Link not found';
 	}
 } elseif(isset($_POST['email'])) {
+	/**
+	 * Check if email is registered
+	**/
 	$email = $_POST['email'];
 	$stmt = $mysqli->prepare("SELECT `id`,`email`,`username` FROM `users` WHERE `email` = ? LIMIT 0,1") or die($mysqli->error());
 	$stmt->bind_param('s', $email);
@@ -76,6 +79,9 @@ if(!isset($_GET['token']) && !isset($_POST['password1']) && !isset($_POST['passw
 	$stmt->bind_result($userId, $startTime, $username);
 	$stmt->fetch();
 	if($stmt->num_rows() > 0) {
+		/**
+		 * Generate key and store it in the db
+		**/
 		$email = strip_tags($_POST['email']);
 		$hashEmail = hash('sha256',$email);
 		$token = hash('sha256',$hashEmail . $configSalt);
@@ -83,6 +89,9 @@ if(!isset($_GET['token']) && !isset($_POST['password1']) && !isset($_POST['passw
 		$stmt = $mysqli->prepare("INSERT INTO `passwordrecovery` (userid, token, starttime, active) VALUES(?, ?, ? ,1)");
 		$stmt->bind_param('sss', $userId, $token, date('Y-m-d H:i:s')) or die($mysqli->error());
 
+		/**
+		 * Check if key is stored and send a mail to the given email
+		**/
 		if($stmt->execute()) {
 			$headers  = 'MIME-Version: 1.0' . "\r\n";
 			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -114,8 +123,34 @@ StreetSoaker
 	} else {
 		$error[] = 'Email address not registered';
 	}
-} else {
+} elseif(isset($_POST['password1']) && isset($_POST['password2'])) {
+	if($_POST['password1'] != $_POST['password2']) {
+		$error[] = "Given passwords don't match";		
+	}
 
+	if(count($error) == 0) {
+		$stmt = $mysqli->prepare("SELECT `salt`,`password`,`id` FROM `users` WHERE id = (SELECT userid FROM passwordrecovery WHERE token = ? AND active = 1 LIMIT 0,1) LIMIT 0,1");
+		$stmt->bind_param('s', $_SESSION['token']);
+		$stmt->execute();
+		$stmt->bind_result($dbSalt, $dbPassword,$userId);
+		$stmt->fetch();
+		$stmt->close();
+
+		$combinedSalt = hash('sha256',$dbSalt . $configSalt);
+		$hashedPassword = hash('sha256',$combinedSalt . $_POST['password1']);
+
+		$stmt = $mysqli->prepare("UPDATE users SET password = ? WHERE id = ?");
+		$stmt->bind_param('si', $hashedPassword, $userId);
+		if($stmt->execute()) {
+			$stmt = $mysqli->prepare("UPDATE passwordrecovery SET active = 0 WHERE userid = ?");
+			$stmt->bind_param('i', $userId);
+			if($stmt->execute()) {
+				echo 'Password succesfully recovered, please login to continue the war!' . "\n" . '<a href="http://' . $_SERVER['HTTP_HOST'] .'">Login In</a>';
+			}
+		} else {
+			$error[] = 'Whoops something went wrong, please try again later';
+		}
+	}
 }
 
 returnError($error, 0);

@@ -5,6 +5,10 @@ require('../includes/functions.php');
 
 $error = array();
 
+if(isset($_SESSION['username'])) {
+    $error[] = 'You are already logged in';
+}
+
 if (!isset($_POST['username'])) {
     $error[] = 'Please enter your username';
 }
@@ -36,7 +40,7 @@ if (isset($_POST['username']) && isset($_POST['password']) && count($error) == 0
 
             $_SESSION['username'] = $username;
             $_SESSION['id'] = $id;
-            echo 'Logged in';
+            echo 1;
         } else {
             $error[] =  'Wrong password';
         }
