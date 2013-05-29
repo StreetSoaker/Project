@@ -12,18 +12,42 @@ html, body{
 body{
     background: url(../img/background.png);
 }
-.logo, .login{
+.logo, .inputbox{
+    position: relative;
     margin: 0 0 0 0;
 }
-input[type="text"]{
+img.loadingLogo{
+    position: relative;
+    top: 15%;
+}
+.inputbox ul{
+    margin: 0;
+    padding: 0;
+}
+.inputbox ul li{
+    list-style: none;
+    float: left;
+    margin: 2% 0 0 0;
+    padding: 0 3%;
+    border-right: 1px solid rgba(255, 255, 255 , 1);
+}
+.inputbox ul li:last-child{
+    border: none;
+}
+.inputbox ul li a{
+    color: rgba(255, 255, 255, 1);
+}
+input[type="text"], input[type="password"]{
+    color: rgba(255, 255, 255, 1);
     height: 40px;
     margin: 0 0 10px 0;
+    background: rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 0;
 }
 
 input[type="text"]:last-child{
     margin-bottom: 0;
-}
-.loginImg{
 }
 
 
@@ -32,6 +56,18 @@ input[type="text"]:last-child{
 /*****************************************/
 .btn-large.loginButton{
     position: absolute;
+    width: 60px;
     height: 90px;
     margin: 0;
+    background: url(../img/loginpage/login_icon_arrow.png) center center no-repeat rgba(0, 0, 0, 0.60);
+    border: none;
+    font-size: 0px;
+    border-radius: 0;
+}
+.btn-large.registerButton{
+    position: absolute;
+    margin: 0;
+    background: rgba(0, 0, 0, 0.60);
+    border: none;
+    border-radius: 0;
 }
