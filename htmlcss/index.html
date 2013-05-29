@@ -1,34 +1,45 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>StreetSoaker</title>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Css -->
-    <link href="css/normalize.css"  rel="stylesheet" />
-    <link href="css/core.css"       rel="stylesheet" />
-    
+    <link href="css/bootstrap.min.css"          rel="stylesheet" />
+    <link href="css/bootstrap-responsive.css"   rel="stylesheet" />
+    <link href="css/normalize.css"              rel="stylesheet" />
+    <link href="css/core.css"                   rel="stylesheet" />
     <!-- Javascript -->
     <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready( function() {
+            var win_top = $(window).height() / 2;
+            var logo_top = $('.logo').height() / 2;
+            var login_top = $('.login').height() / 2;
+            
+            var login_mid = win_top - login_top;
+            var logo_mid = win_top - logo_top;
+            
+            $('.logo').css({'position' : 'relative', 'top' : logo_mid+'px'});
+            $('.login').css({'position' : 'relative', 'top' : login_mid+'px'});
+            console.log(logo_mid);
+        });
+    </script>
 </head>
 <body>
-    <div id="screen">
-        <div id="loginpage">
-            <div id="logo">
-                <img src="images/loginpage/login_logo.png" alt="StreetSoaker logo" />
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span6 logo">
+                    <img class="offset4 loginImg" src="img/loginpage/login_logo.png" alt="StreetSoaker Logo" />
             </div>
-            <div id="loginbox">
-                <form>
-                    <div id="inputs">
-                    <input type="text" placeholder="username/email" />
-                    <input type="text" placeholder="password" />                        
-                    </div>
-                    <button type="submit"></button>
-                </form>
-                <div class="clear"></div>
-                <ul>
-                    <li><a href="#">Forgot password</a></li>
-                    <li><a href="#">Register account</a></li>
-                </ul>
+            <div class="span6 login">
+                    <form>
+                        <input type="text" class="span5" placeholder="username/email" />
+                        <button class="btn btn-large btn-primary loginButton" type="button">##</button></br>
+                        <input type="text" class="span5" placeholder="password" /> 
+                    </form>
+            </div>
         </div>
-        
     </div>
 </body>
 </html>
