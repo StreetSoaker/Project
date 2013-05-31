@@ -22,8 +22,8 @@
                 var login_mid = win_top - login_top;
                 var logo_mid = win_top - logo_top;
                 
-                $('.logo').css({'position' : 'relative', 'top' : logo_mid+'px'});
-                $('.inputbox').css({'position' : 'relative', 'top' : login_mid+'px'});
+                $('.logo').css({'top' : logo_mid+'px'});
+                $('.inputbox').css({'top' : login_mid+'px'});
             }
             $('img').load(function(){
                 vcenter();
@@ -43,14 +43,13 @@
             </div>
             <div class="span6 inputbox">
                     <form>
-                        <input type="text" class="span5" placeholder="username/email" />
-                        <button class="btn btn-large btn-primary loginButton" type="button">##</button></br>
-                        <input type="text" class="span5" placeholder="password" /> 
+                        <input type="text" class="span5" placeholder="username*" /></br>
+                        <input type="text" class="span5" placeholder="email*" /></br>
+                        <input type="password" class="span5" placeholder="password*" /></br>
+                        <input type="password" class="span5" placeholder="comfirm password*" /></br>
+                        <input type="text" class="span5" placeholder="nickname*"></br>
+                        <button class="btn btn-large btn-primary registerButton span5" type="button">create account</button>
                     </form>
-                    <ul>
-                        <li><a href="#">Forgot password</a></li>
-                        <li><a href="#">Register account</a></li>
-                    </ul>
             </div>
         </div>
     </div>

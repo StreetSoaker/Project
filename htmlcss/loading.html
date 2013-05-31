@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Css -->
+    <link href="css/bootstrap.min.css"          rel="stylesheet" />
+    <!--<link href="css/bootstrap-responsive.css"   rel="stylesheet" />-->
+    <link href="css/normalize.css"              rel="stylesheet" />
+    <link href="css/core.css"                   rel="stylesheet" />
+    <!-- Javascript -->
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready( function() {
+            function hcenter(){
+                var win_left = $(window).width() / 2;
+                var logo_left = $('.loadingLogo').width() / 2;
+                
+                var logo_mid = win_left - logo_left;
+                
+                $('.loadingLogo').css({'position' : 'relative', 'left' : logo_mid+'px'});
+            }
+            $('img').load(function(){
+                hcenter();
+                
+                $(window).resize(function(){
+                    hcenter();    
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                    <img class="loadingLogo" src="img/loadingpage/loading_logo.png" alt="StreetSoaker Logo" />
+            </div>
+        </div>
+    </div>
+</body>
+</html>
