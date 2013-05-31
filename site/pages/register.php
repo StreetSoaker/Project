@@ -61,6 +61,7 @@ if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['pass
 		} else {
 			$error[] = 'Something went wrong, try again later';
 		}
+		$stmt->close();
 	}
 	
 
