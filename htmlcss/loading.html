@@ -16,16 +16,29 @@
             function hcenter(){
                 var win_left = $(window).width() / 2;
                 var logo_left = $('.loadingLogo').width() / 2;
+                var loading_left = $('.loading').width() / 2;
                 
                 var logo_mid = win_left - logo_left;
+                var loading_mid = win_left - loading_left;
                 
-                $('.loadingLogo').css({'position' : 'relative', 'left' : logo_mid+'px'});
+                $('.loadingLogo').css({'left' : logo_mid+'px',});
+                $('.loading').css({'left' : loading_mid+'px',});    
+            }
+            function vcenter(){
+                var win_top = $(window).height() / 2;
+                var loading_top = $('#loading').height() / 2;
+                
+                var loading_mid = win_top - loading_top;
+                
+                $('#loading').css({'position':'relative','top' : loading_mid+'px'});
             }
             $('img').load(function(){
                 hcenter();
+                vcenter();
                 
                 $(window).resize(function(){
                     hcenter();    
+                    vcenter();
                 });
             });
         });
@@ -35,7 +48,10 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span12">
+                <div id="loading">
                     <img class="loadingLogo" src="img/loadingpage/loading_logo.png" alt="StreetSoaker Logo" />
+                    <div class="loading"></div>
+                </div>
             </div>
         </div>
     </div>

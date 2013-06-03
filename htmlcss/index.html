@@ -22,8 +22,8 @@
                 var login_mid = win_top - login_top;
                 var logo_mid = win_top - logo_top;
                 
-                $('.logo').css({'position' : 'relative', 'top' : logo_mid+'px'});
-                $('.inputbox').css({'position' : 'relative', 'top' : login_mid+'px'});
+                $('.logo').css({'top' : logo_mid+'px'});
+                $('.inputbox').css({'top' : login_mid+'px'});
             }
             $('img').load(function(){
                 vcenter();
@@ -38,14 +38,14 @@
 <body>
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span6 logo">
-                    <img class="offset4 loginImg" src="img/loginpage/login_logo.png" alt="StreetSoaker Logo" />
+            <div class="span4 logo">
+                    <img class="offset1 loginImg" src="img/loginpage/login_logo.png" alt="StreetSoaker Logo" />
             </div>
-            <div class="span6 inputbox">
+            <div class="offset1 span7 inputbox">
                     <form>
-                        <input type="text" class="span5" placeholder="username/email" />
-                        <button class="btn btn-large btn-primary loginButton" type="button">##</button></br>
-                        <input type="text" class="span5" placeholder="password" /> 
+                        <input type="text" class="span9" placeholder="username/email" />
+                        <button class="btn btn-large btn-primary loginButton pull-right" type="button"></button></br>
+                        <input type="text" class="span9" placeholder="password" /> 
                     </form>
                     <ul>
                         <li><a href="#">Forgot password</a></li>
