@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Css -->
+    <link href="css/bootstrap.min.css"          rel="stylesheet" />
+    <!--<link href="css/bootstrap-responsive.css"   rel="stylesheet" />-->
+    <link href="css/normalize.css"              rel="stylesheet" />
+    <link href="css/core.css"                   rel="stylesheet" />
+    <!-- Javascript -->
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready( function() {
+            
+            function vcenter(){
+                var win_top = $(window).height() / 2;
+                var logo_top = $('.logo').height() / 2;
+                var login_top = $('.inputbox').height() / 2;
+                
+                var login_mid = win_top - login_top;
+                var logo_mid = win_top - logo_top;
+                
+                $('.logo').css({'top' : logo_mid+'px'});
+                $('.inputbox').css({'top' : login_mid+'px'});
+            }
+            $('img').load(function(){
+                vcenter();
+                
+                $(window).resize(function(){
+                    vcenter();    
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span4 logo">
+                    <img class="offset1 loginImg" src="img/loginpage/login_logo.png" alt="StreetSoaker Logo" />
+            </div>
+            <div class="offset1 span7 inputbox">
+                    <form>
+                        <input type="text" class="span9" placeholder="username*" /></br>
+                        <input type="text" class="span9" placeholder="email*" /></br>
+                        <input type="password" class="span9" placeholder="password*" /></br>
+                        <input type="password" class="span9" placeholder="comfirm password*" /></br>
+                        <input type="text" class="span9" placeholder="nickname*"></br>
+                        <button class="btn btn-large btn-primary registerButton span9" type="button">create account</button>
+                    </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
