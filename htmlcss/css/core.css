@@ -47,7 +47,7 @@ vertical-align: top;
     font-family: HelveticaNeueLTStd-LtEx;
     color: rgba(255, 255, 255, 1);
 }
-input[type="text"], input[type="password"]{
+.inputbox input[type="text"], .inputbox input[type="password"]{
     font-family: HelveticaNeueLTStd-LtEx;
     color: rgba(255, 255, 255, 1);
     height: 40px;
@@ -194,8 +194,48 @@ aside#menu ul li img{
     color: #fff;
     padding: 4px;
     width: calc(50% + 12px);
+    height: 30px;
     margin: 5px 0 0 25%;
     background: rgba(20, 20, 20, 1);
     border: none;
 }
 
+#sub_menu .tab-pane form:first-child{
+    margin-top: 0px;
+}
+#sub_menu .tab-pane form{
+    margin: 10% 0;
+}
+aside#stats{
+    position: relative;
+    top: 40px;
+    overflow-y: scroll;
+    height: calc(100% - 40px);
+    float: right;
+    background: rgba(0, 0, 0, 0.8);
+    width: 37.5%;
+}
+aside#stats section{
+    margin: 0 25px 25px 25px;
+    padding: 0 25px 0 0;
+    border-right: 2px solid rgba(255, 255, 255 , 1);
+    color: rgba(255, 255, 255, 1);
+}
+aside#stats h2{
+    font-size: 150%;
+}
+aside#stats table{
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 25px;
+    list-style: none;
+    font-weight: bold;
+    font-size: 100%;
+}
+aside#stats tr{
+    height: 25px;
+    padding: 50px;
+}
+aside#stats td{
+    width: 50%;
+}
