@@ -66,9 +66,9 @@
             </div>
             <div class="offset1 span7 inputbox">
                     <form id="login">
-                        <input type="text" class="span9" placeholder="username/email" id="username" />
-                        <input type="submit" class="btn btn-large btn-primary loginButton pull-right" value="Login" /></br>
-                        <input type="password" class="span9" placeholder="password" id="password"/> 
+                        <input type="text" class="span9" placeholder="username/email" id="username" tabindex=1 />
+                        <input type="submit" class="btn btn-large btn-primary loginButton pull-right" tabindex=3 value="" /></br>
+                        <input type="password" class="span9" placeholder="password" id="password" tabindex=2 /> 
                     </form>
                     <ul>
                         <li><a href="#">Forgot password</a></li>

@@ -1,6 +1,3 @@
-<?php
-
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +7,7 @@
     <link href="css/bootstrap.min.css"          rel="stylesheet" />
     <!--<link href="css/bootstrap-responsive.css"   rel="stylesheet" />-->
     <link href="css/normalize.css"              rel="stylesheet" />
+    <link href="css/fonts.css"                   rel="stylesheet" />
     <link href="css/core.css"                   rel="stylesheet" />
     <!-- Javascript -->
     <script src="js/jquery-1.9.1.js"></script>
@@ -17,6 +15,62 @@
     <script src="js/bootstrap-tab.js"></script>
     <script>
         $(document).ready( function() {
+            var sub_menu = 'closed';        
+            
+            function calcfix(item, overflow){    
+                var screenHeight = $(window).height();
+                $(item).css({'height' : (screenHeight - overflow)});
+            }
+             
+            
+            calcfix('#menu', 40); 
+            calcfix('#sub_menu', 90); 
+            calcfix('#stats', 40); 
+            $(window).resize(function(){   
+                calcfix('#menu', 40); 
+                calcfix('#sub_menu', 90);
+                calcfix('#stats', 40);
+            });
+            
+            
+            
+            $('#menu').hide();
+            $('#sub_menu').hide();
+            $('#stats').hide();
+            
+            $('#menu').click(function(e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+            $('.menu_button').click(function(){
+                $('#menu').toggle();
+                $('#stats').hide();
+                
+                if(sub_menu == 'open'){
+                    $('#sub_menu').toggle();
+                    sub_menu = 'closed';
+                }
+            });
+            $('.sub_menu_button').click(function(){
+                if(sub_menu == 'closed'){    
+                    $('#sub_menu').toggle();
+                    sub_menu = 'open';
+                }
+            });
+            $('.stats_button').click(function(){
+                $('#stats').toggle();
+                $('#menu').hide();
+                if(sub_menu == 'open'){    
+                    $('#sub_menu').toggle();
+                    sub_menu = 'closed';
+                }
+            });
+
+
+
+            /*
+             * Countdown
+             */
             var time = '15:00';
 
             $('#menu').click(function (e) {
@@ -66,6 +120,16 @@
                 timer();
             }, 1000);
 
+
+
+            /*
+             * Logout
+             */
+            $('#menu ul li:last').click(function() {
+                $.post('pages/logout.php', {'test':'test'}, function() {
+                    history.go(0);
+                });
+            });
         });
     </script>
     <style>
@@ -76,21 +140,22 @@
         <div id="topbar">
             <div class="pull-left">
                 <ul>
-                    <li><a href="#"><img src="img/ingamepage/button_menu.png" alt="menu/back button" class="line_right" /></a></li>
-                    <li>Finn105</li>
+                    <li><a class="menu_button"><img src="img/ingamepage/button_menu.png" alt="menu/back button" class="line_right" /></a></li>
+                    <li><?= $_SESSION['username'] ?></li>
                 </ul>
             </div>
             <div class="pull-right">
                 <ul>
-                    <li><img src="img/ingamepage/icon_stopwatch.png" alt="stopwatch icon" />15:00</li>
-                    <li><a href="#"><img src="img/ingamepage/button_stats.png" alt="stats button" class="line_left" /></a></li>
+                    <li><img src="img/ingamepage/icon_stopwatch.png" alt="stopwatch icon" />14:25</li>
+                    <li><a class="stats_button"><img src="img/ingamepage/button_stats.png" alt="stats button" class="line_left" /></a></li>
                 </ul>
             </div>            
         </div>
         <aside id="menu">
             <ul>
-                <li><img src="img/ingamepage/icon_settings.png" alt="Setting icon" /><a href="#settings" data-toggle="tab">Settings</a></li>
-                <li><img src="img/ingamepage/icon_about.png" alt="About icon" /><a href="#about" data-toggle="tab">About us</a></li>
+                <li><img src="img/ingamepage/icon_skull.png" alt="Setting icon" /><a class="sub_menu_button" href="#killcode" data-toggle="tab">kill code</a></li>
+                <li><img src="img/ingamepage/icon_settings.png" alt="Setting icon" /><a class="sub_menu_button" href="#settings" data-toggle="tab">Settings</a></li>
+                <li><img src="img/ingamepage/icon_about.png" alt="About icon" /><a class="sub_menu_button" href="#about" data-toggle="tab">About us</a></li>
                 <li><img src="img/ingamepage/icon_logout.png" alt="Logout icon" /><a href="#">Logout</a></li>
             </ul>
         </aside>
@@ -101,8 +166,15 @@
                     <button>change nickname</button>
                 </form>
                 <form>
-                    <span class="inputnametag">Password</span><input type="password" name="password" value="haahahah"/></br>
-                    <button>change nickname</button>
+                    <span class="inputnametag">Password</span><input type="password" name="password" value="robinvalkvalk"/></br>
+                    <span class="inputnametag">New email</span><input type="email" name="new_email" value="finn105@sintlucasedu.nl"/></br>
+                    <button>change email</button>
+                </form>
+                <form>
+                    <span class="inputnametag">Old password</span><input type="password" name="old_password" value="robinvalkvalk"/></br>
+                    <span class="inputnametag">New password</span><input type="password" name="new_password" value="joeriaben"/></br>
+                    <span class="inputnametag">Repeat password</span><input type="password" name="new_password" value="joeriaben"/></br>
+                    <button>change password</button>
                 </form>
             </div>
             <div class="tab-pane" id="about">
@@ -118,7 +190,63 @@
                 <b>Koen van den Heuvel</b>
                 <p>lectus neque congue quam, nec accumsan magna augue sed turpis. Sed ac nulla a odio mattis bibendum nec placerat lorem. Ut imperdiet scelerisque aliquam. </p>    
             </div>
+            <div class="tab-pane" id="killcode">
+                <center>
+                    <span>Your code:</br>
+                            2585</br></br>
+                        You killed ?</span></br>
+                            
+                    <input type="number" name="killcode" class="killcode" limit="4"/>
+                </center>
+            </div>
         </div>
         <div id="map"></div>
+        <aside id="stats">
+            <section>
+                <h2>Players</h2>
+                <table>
+                    <tr>
+                        <td>Online:</td><td>256</td>
+                    </tr>
+                    <tr>
+                        <td>Alive:</td><td>201</td>
+                    </tr>
+                    <tr>
+                        <td>Around:</td><td>26</td>
+                    </tr>
+                </table>
+            </section>
+            <section>
+                <h2>Game Info:</h2>
+                <table>
+                    <tr>
+                        <td>Players:</td><td>10/25</td>
+                    </tr>
+                    <tr>
+                        <td>Target:</td><td>DinDin</td>
+                    </tr>
+                    <tr>
+                        <td>Killed:</td><td>2</td>
+                    </tr>
+                    <tr>
+                        <td>Next vistion:</td><td>14:25</td>
+                    </tr>
+                </table>
+            </section>
+            <section>
+                <h2>Account Stats:</h2>
+                <table>
+                    <tr>
+                        <td>Kills:</td><td>54</td>
+                    </tr>
+                    <tr>
+                        <td>Deads:</td><td>108</td>
+                    </tr>
+                    <tr>
+                        <td>KD Ratio:</td><td>0.50</td>
+                    </tr>
+                </table>
+            </section>
+        </aside>
 </body>
 </html>
