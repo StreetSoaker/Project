@@ -1,5 +1,5 @@
 <?php
-    
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,12 +17,55 @@
     <script src="js/bootstrap-tab.js"></script>
     <script>
         $(document).ready( function() {
+            var time = '15:00';
 
             $('#menu').click(function (e) {
                 e.preventDefault();
                 $(this).tab('show');
-            })
-            
+            });
+
+            function timer() {
+
+                timeArray = time.split(':');
+                if(timeArray[1] == '') {
+                    time = timeArray[0]+':';
+                } else {
+
+                    parseInt(timeArray[0]);
+                    parseInt(timeArray[1]);
+
+                    if(timeArray[1] == 00) {
+                        timeArray[1] = 59;
+                        timeArray[0]--;
+                    } else {
+                        timeArray[1]--;
+                    }
+                    if(timeArray[0] == 00 && timeArray[1] == 00) {
+                        timeArray[0] = 'Waiting for server response!';
+                        timeArray[1] = '';
+                    }
+                    if(timeArray[1] < 10) {
+                        timeArray[1] = '0' + timeArray[1];
+                    }
+
+                    if(timeArray[1] === '') {
+                        time = timeArray[0]+':';
+                        showTime = timeArray[0];
+                    } else {
+                        time = timeArray[0]+':'+timeArray[1];
+                        showTime = timeArray[0]+':'+timeArray[1];
+                    }
+
+                    $('.pull-right ul li:first').html('<img src="img/ingamepage/icon_stopwatch.png" alt="stopwatch icon" />'+showTime);
+
+                }
+
+            }
+
+            timeClock = setInterval(function() {
+                timer();
+            }, 1000);
+
         });
     </script>
     <style>
@@ -39,7 +82,7 @@
             </div>
             <div class="pull-right">
                 <ul>
-                    <li><img src="img/ingamepage/icon_stopwatch.png" alt="stopwatch icon" />14:25</li>
+                    <li><img src="img/ingamepage/icon_stopwatch.png" alt="stopwatch icon" />15:00</li>
                     <li><a href="#"><img src="img/ingamepage/button_stats.png" alt="stats button" class="line_left" /></a></li>
                 </ul>
             </div>            
