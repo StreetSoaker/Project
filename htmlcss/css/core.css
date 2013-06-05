@@ -75,8 +75,8 @@ input[type="text"]:last-child{
     border-radius: 0;
 }
 .btn-large.registerButton{
-    position: absolute;
-    margin: 0;
+    position: relative;
+    margin: 0 0 50px 0;
     background: rgba(0, 0, 0, 0.60);
     border: none;
     border-radius: 0;
