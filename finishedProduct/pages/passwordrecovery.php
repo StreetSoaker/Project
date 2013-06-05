@@ -1,3 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Css -->
+    <link href="css/bootstrap.min.css"          rel="stylesheet" />
+    <!--<link href="css/bootstrap-responsive.css"   rel="stylesheet" />-->
+    <link href="css/normalize.css"              rel="stylesheet" />
+    <link href="css/fonts.css"                   rel="stylesheet" />
+    <link href="css/core.css"                   rel="stylesheet" />
+    <!-- Javascript -->
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready( function() {
+            
+            function vcenter(){
+                var win_top = $(window).height() / 2;
+                var logo_top = $('.logo').height() / 2;
+                var login_top = $('.inputbox').height() / 2;
+                
+                var login_mid = win_top - login_top;
+                var logo_mid = win_top - logo_top;
+                
+                $('.logo').css({'top' : logo_mid+'px'});
+                $('.inputbox').css({'top' : login_mid+'px'});
+            }
+            $('img').load(function(){
+                vcenter();
+                
+                $(window).resize(function(){
+                    vcenter();    
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span4 logo">
+                    <img class="offset1 loginImg" src="img/loginpage/login_logo.png" alt="StreetSoaker Logo" />
+            </div>
+            <div class="offset1 span7 inputbox">
 <?php
 
 //require config and functions files
@@ -13,8 +58,8 @@ if(isset($_SESSION['username'])) {
 if(!isset($_GET['token']) && !isset($_POST['password1']) && !isset($_POST['password2']) && !isset($_POST['email'])) {
 	?>
 		<form method="post" action="passwordrecovery.php">
-			<input type="email" name="email" placeholder="Email" />
-			<input type="submit" name="submit" value="Send mail" />
+			<input type="email" name="email"  class="span9" placeholder="Email" />
+			<input  class="btn btn-large btn-primary registerButton span9" type="submit" name="submit" value="Send mail" />
 		</form>
 	<?
 } elseif(isset($_GET['token'])) {
@@ -55,9 +100,9 @@ if(!isset($_GET['token']) && !isset($_POST['password1']) && !isset($_POST['passw
 		 * Show input boxes to enter the new password
 		**/?>
 		<form method="post" action="http://<?= $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] ?>">
-			<input type="password" name="password1" placeholder="New password" /><br />
-			<input type="password" name="password2" placeholder="Re-enter password" /><br />
-			<input type="submit" name="submit" value="Reset Password" />
+			<input type="password" name="password1" class="span9" placeholder="New password" /><br />
+			<input type="password" name="password2" class="span9" placeholder="Re-enter password" /><br />
+			<input class="btn btn-large btn-primary registerButton span9" type="submit" name="submit" value="Reset Password" />
 		</form>
 		<?php
 
@@ -156,3 +201,8 @@ StreetSoaker
 returnError($error, 0);
  
 ?>
+</div>
+        </div>
+    </div>
+</body>
+</html>
