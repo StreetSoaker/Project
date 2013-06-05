@@ -7,6 +7,7 @@
     <link href="css/bootstrap.min.css"          rel="stylesheet" />
     <!--<link href="css/bootstrap-responsive.css"   rel="stylesheet" />-->
     <link href="css/normalize.css"              rel="stylesheet" />
+    <link href="css/fonts.css"                   rel="stylesheet" />
     <link href="css/core.css"                   rel="stylesheet" />
     <!-- Javascript -->
     <script src="js/jquery-1.9.1.js"></script>
@@ -14,20 +15,38 @@
     <script src="js/bootstrap-tab.js"></script>
     <script>
         $(document).ready( function() {
-            var sub_menu = 'closed';
+            var sub_menu = 'closed';        
+            
+            function calcfix(item, overflow){    
+                var screenHeight = $(window).height();
+                $(item).css({'height' : (screenHeight - overflow)});
+            }
+             
+            
+            calcfix('#menu', 40); 
+            calcfix('#sub_menu', 90); 
+            calcfix('#stats', 40); 
+            $(window).resize(function(){   
+                calcfix('#menu', 40); 
+                calcfix('#sub_menu', 90);
+                calcfix('#stats', 40);
+            });
+            
+            
             
             $('#menu').hide();
             $('#sub_menu').hide();
             $('#stats').hide();
             
-            $('#menu').click(function (e) {
+            $('#menu').click(function(e) {
                 e.preventDefault();
                 $(this).tab('show');
-            })
+            });
             $('.menu_button').click(function(){
                 console.log(1);
                 $('#menu').toggle();
                 $('#stats').hide();
+                
                 if(sub_menu == 'open'){
                     $('#sub_menu').toggle();
                     sub_menu = 'closed';
@@ -47,8 +66,6 @@
                     sub_menu = 'closed';
                 }
             });
-            
-            
         });
     </script>
     <style>
@@ -72,6 +89,7 @@
         </div>
         <aside id="menu">
             <ul>
+                <li><img src="img/ingamepage/icon_skull.png" alt="Setting icon" /><a class="sub_menu_button" href="#killcode" data-toggle="tab">kill code</a></li>
                 <li><img src="img/ingamepage/icon_settings.png" alt="Setting icon" /><a class="sub_menu_button" href="#settings" data-toggle="tab">Settings</a></li>
                 <li><img src="img/ingamepage/icon_about.png" alt="About icon" /><a class="sub_menu_button" href="#about" data-toggle="tab">About us</a></li>
                 <li><img src="img/ingamepage/icon_logout.png" alt="Logout icon" /><a href="#">Logout</a></li>
@@ -107,6 +125,15 @@
                 
                 <b>Koen van den Heuvel</b>
                 <p>lectus neque congue quam, nec accumsan magna augue sed turpis. Sed ac nulla a odio mattis bibendum nec placerat lorem. Ut imperdiet scelerisque aliquam. </p>    
+            </div>
+            <div class="tab-pane" id="killcode">
+                <center>
+                    <span>Your code:</br>
+                            2585</br></br>
+                        You killed ?</span></br>
+                            
+                    <input type="number" name="killcode" class="killcode" limit="4"/>
+                </center>
             </div>
         </div>
         <div id="map"></div>

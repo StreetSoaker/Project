@@ -1,4 +1,3 @@
-@import url('fonts.css');
 /*****************************************/
 /**              General                **/
 /*****************************************/
@@ -11,6 +10,7 @@ html, body{
     height: 100%;
 }
 body{
+    font-family: HelveticaNeueLTStd-LtEx;
     background: url(../img/background.png) rgba(153, 8, 10, 1);
 }
 img{
@@ -91,9 +91,9 @@ div.loading{
     width: 59px;
     height: 21px;
     animation: loading 1s infinite;
-    -webkit-animation: loading 1s infinite;
+    animation: loading 1s infinite;
 }
-@-webkit-keyframes loading{
+@keyframes loading{
     0%   {background: url(../img/anims/loading/loading_anim_1.png);}
     25%  {background: url(../img/anims/loading/loading_anim_2.png);}
     50%  {background: url(../img/anims/loading/loading_anim_3.png);}
@@ -140,7 +140,7 @@ div.loading{
 aside#menu{
     position: relative;
     top: 40px;
-    height: calc(100% - 40px);
+    /*height: calc(100% - 40px);*/
     float: left;
     background: rgba(0, 0, 0, 0.8);
     width: 37.5%;
@@ -165,9 +165,10 @@ aside#menu ul li img{
     margin: 0 8px 0 0;
 }
 #sub_menu{
+    overflow-y: scroll;
     position: relative;
     top: 40px;
-    height: calc(100% - 40px - 50px);
+    /*height: calc(100% - 40px - 50px);*/
     background: rgba(0, 0, 0, 0.88);
     padding: 25px;
 }
@@ -210,7 +211,7 @@ aside#stats{
     position: relative;
     top: 40px;
     overflow-y: scroll;
-    height: calc(100% - 40px);
+    /*height: calc(100% - 40px);*/
     float: right;
     background: rgba(0, 0, 0, 0.8);
     width: 37.5%;
@@ -238,4 +239,12 @@ aside#stats tr{
 }
 aside#stats td{
     width: 50%;
+}
+.killcode{
+    margin-left: 25%;
+    text-align: center;
+}
+#killcode span{
+    font-size: 200%;
+    font-weight: bold;
 }
