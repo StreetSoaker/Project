@@ -1,17 +1,20 @@
+<?php
+	ob_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Bootstrap 101 Template</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Css -->
-    <link href="css/bootstrap.min.css"          rel="stylesheet" />
+    <link href="../css/bootstrap.min.css"          rel="stylesheet" />
     <!--<link href="css/bootstrap-responsive.css"   rel="stylesheet" />-->
-    <link href="css/normalize.css"              rel="stylesheet" />
-    <link href="css/fonts.css"                   rel="stylesheet" />
-    <link href="css/core.css"                   rel="stylesheet" />
+    <link href="../css/normalize.css"              rel="stylesheet" />
+    <link href="../css/fonts.css"                   rel="stylesheet" />
+    <link href="../css/core.css"                   rel="stylesheet" />
     <!-- Javascript -->
-    <script src="js/jquery-1.9.1.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="../js/jquery-1.9.1.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
     <script>
         $(document).ready( function() {
             
@@ -40,7 +43,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span4 logo">
-                    <img class="offset1 loginImg" src="img/loginpage/login_logo.png" alt="StreetSoaker Logo" />
+                    <img class="offset1 loginImg" src="../img/loginpage/login_logo.png" alt="StreetSoaker Logo" />
             </div>
             <div class="offset1 span7 inputbox">
 <?php
